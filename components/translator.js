@@ -4,7 +4,7 @@ const americanToBritishTitles = require("./american-to-british-titles.js")
 const britishOnly = require('./british-only.js')
 
 class Translator {
-    #reverseTranslations(translationFile) {
+    reverseTranslations(translationFile) {
         // Create a new object by swapping keys and values
         const reversed = {};
         for (let key in translationFile) {
@@ -13,21 +13,21 @@ class Translator {
         return reversed;
       }
 
-    #translateAmerican = [
+    translateAmerican = [
         americanOnly,
-        this.#reverseTranslations(britishOnly),
+        this.reverseTranslations(britishOnly),
         americanToBritishSpelling,
         americanToBritishTitles
         ]
 
-    #translateBritish = [
-        this.#reverseTranslations(americanOnly),
+    translateBritish = [
+        this.reverseTranslations(americanOnly),
         britishOnly,
-        this.#reverseTranslations(americanToBritishSpelling),
-        this.#reverseTranslations(americanToBritishTitles)
+        this.reverseTranslations(americanToBritishSpelling),
+        this.reverseTranslations(americanToBritishTitles)
         ]
 
-    #translate(text, translationsArray)  {
+    translate(text, translationsArray)  {
         let translation = text;
 
         translationsArray.forEach(translationObj => {
@@ -41,11 +41,11 @@ class Translator {
     }
 
     americanToBritish(text) {
-        return this.#translate(text, this.#translateAmerican);
+        return this.translate(text, this.translateAmerican)
     }
 
     britishToAmerican(text) {
-        return this.#translate(text, this.#translateBritish);
+        return this.translate(text, this.translateBritish)
     }
 }
 
