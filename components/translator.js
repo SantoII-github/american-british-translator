@@ -39,13 +39,23 @@ class Translator {
 
         return translation;
     }
+    
+    timeToBritish(str) {
+        // Replace American time format (HH:MM) with British format (HH.MM)
+        return str.replace(/\b(\d{1,2}):(\d{2})\b/g, '$1.$2');
+    }
+
+    timeToAmerican(str) {
+        // Use a regular expression to find time in the British format (HH.MM) and replace it with the American format (HH:MM)
+        return str.replace(/\b(\d{1,2})\.(\d{2})\b/g, '$1:$2');
+    }
 
     americanToBritish(text) {
-        return this.translate(text, this.translateAmerican)
+        return this.timeToBritish(this.translate(text, this.translateAmerican));
     }
 
     britishToAmerican(text) {
-        return this.translate(text, this.translateBritish)
+        return this.timeToAmerican(this.translate(text, this.translateBritish));
     }
 }
 
