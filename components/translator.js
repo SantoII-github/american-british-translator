@@ -27,13 +27,26 @@ class Translator {
         this.reverseTranslations(americanToBritishTitles)
         ]
 
+    preserveCase(original, translated) {
+        if (original === original.toUpperCase()) {
+            return translated.toUpperCase();
+        } else if (original === original.toLowerCase()) {
+            return translated.toLowerCase();
+        } else if (original[0] === original[0].toUpperCase()) {
+            return translated.charAt(0).toUpperCase() + translated.slice(1);
+        }
+        return translated; // Return as is for mixed case
+    }
+
     translate(text, translationsArray)  {
         let translation = text;
 
         translationsArray.forEach(translationObj => {
             for (let key in translationObj) {
-                const regex = new RegExp(`\\b${key}\\b`, 'g');
-                translation = translation.replace(regex, translationObj[key]);
+                const regex = new RegExp(`\\b(${key})(\\.)?`, 'gi');
+                translation = translation.replace(regex, (match) => {
+                    return `<span class="highlight">${this.preserveCase(match, translationObj[key])}</span>`;
+                });
             }
         })
 
@@ -42,7 +55,7 @@ class Translator {
     
     timeToBritish(str) {
         // Replace American time format (HH:MM) with British format (HH.MM)
-        return str.replace(/\b(\d{1,2}):(\d{2})\b/g, '$1.$2');
+        return str.replace(/\b(\d{1,2}):(\d{2})\b/g, '<span class="highlight">' + '$1.$2' + '</span>');
     }
 
     timeToAmerican(str) {
