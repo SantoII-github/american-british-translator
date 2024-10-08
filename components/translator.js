@@ -44,10 +44,10 @@ class Translator {
         translationsArray.forEach(translationObj => {
             for (let key in translationObj) {
                 const regex = new RegExp(`\\b(${key})(\\.)?`, 'gi');
-                translation = translation.replace(regex, (match) => {
-                    return `<span class="highlight">${this.preserveCase(match, translationObj[key])}</span>`;
+                translation = translation.replace(regex, (match, p1, p2) => {
+                    return `<span class="highlight">${this.preserveCase(p1, translationObj[key])}</span>${p2 || ''}`;
                 });
-            }
+            };
         })
 
         return translation;
